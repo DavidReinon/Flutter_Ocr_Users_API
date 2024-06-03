@@ -72,6 +72,11 @@ namespace AzureOcrFlutterAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
+            var existingUser = await _userRepository.GetUserById(id);
+            if (existingUser == null)
+            {
+                return NotFound();
+            }
             await _userRepository.DeleteUser(id);
             return NoContent();
         }
