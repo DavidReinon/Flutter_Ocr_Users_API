@@ -34,7 +34,15 @@ namespace AzureOcrFlutterAPI.Repositories
             var existingUser = await _context.Users.FindAsync(user.Id);
             if (existingUser != null)
             {
-                _context.Users.Update(existingUser);
+                if (user.Name != null)
+                {
+                    existingUser.Name = user.Name;
+                }
+                if (user.Password != null)
+                {
+                    existingUser.Password = user.Password;
+                }
+
                 await _context.SaveChangesAsync();
             }
         }

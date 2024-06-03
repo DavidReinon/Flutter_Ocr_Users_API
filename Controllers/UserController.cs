@@ -1,7 +1,6 @@
 ﻿using AzureOcrFlutterAPI.Models;
 using AzureOcrFlutterAPI.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json.Nodes;
 
 namespace AzureOcrFlutterAPI.Controllers
 {
@@ -55,30 +54,18 @@ namespace AzureOcrFlutterAPI.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(int id, JsonValue jsonUser)
+        public async Task<IActionResult> UpdateUser(int id, User user)
         {
-            if (jsonUser["id"] != null)
-            {
-                return BadRequest();
-            }
 
             var existingUser = await _userRepository.GetUserById(id);
+
             if (existingUser == null)
             {
                 return NotFound();
             }
 
-            if (jsonUser["name"] != null)
-            {
-                existingUser.Name = jsonUser["name"]!.ToString();
-            }
-
-            if (jsonUser["password"] != null)
-            {
-                existingUser.Password = jsonUser["password"]!.ToString();
-            }
-
-            await _userRepository.UpdateUser(existingUser);
+            user.Id = id;
+            await _userRepository.UpdateUser(user);
             return NoContent();
         }
 
